@@ -12,7 +12,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName='Home' screenOptions={{ headerTitleAlign: 'center' }}>
-          <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
+          <Stack.Screen name='Home' component={Home} options={{ headerShown: true }} />
           <Stack.Screen name='MovieDetails' component={MovieDetails} options={{ headerTitle: '' }} />
         </Stack.Navigator>
       </NavigationContainer>

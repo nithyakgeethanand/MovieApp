@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import React from 'react'
 import { useQuery } from 'react-query';
 import { getAllMovies } from '../queries/movies';
@@ -6,8 +6,14 @@ import LoadingElement from '../components/LoadingElement';
 import movie_poster from '../assets/movie_poster.png';
 import { AntDesign } from '@expo/vector-icons';
 import colors from '../utils/colors';
+import { useNavigation } from '@react-navigation/native';
+import ErrorElement from '../components/ErrorElement';
+import fonts from '../utils/fonts';
 
 const Home = () => {
+    const navigation = useNavigation();
+
+    // Get all movies
     const { data, isLoading, isError } = useQuery('movies', getAllMovies);
 
     if (isLoading) {
@@ -15,28 +21,26 @@ const Home = () => {
     }
 
     if (isError) {
-        return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text>Error fetching data</Text>
-            </View>
-        );
+       return <ErrorElement />;
     }
 
     const renderItem = ({ item }) => {
         return (
-            <View style={styles.flatListConatiner}>
-                <Image
-                    source={movie_poster}
-                    style={styles.moviePoster}
-                />
-                <View style={styles.movieDesc}>
-                    <Text style={styles.movieHeader}>{item.movie}</Text>
-                    <View style={styles.ratingContainer}>
-                        <AntDesign name="star" size={24} color={colors.ratingStar} />
-                        <Text style={styles.rating}>{item.rating}</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("MovieDetails", {id : item.id})}>
+                <View style={styles.flatListConatiner}>
+                    <Image
+                        source={movie_poster}
+                        style={styles.moviePoster}
+                    />
+                    <View style={styles.movieDesc}>
+                        <Text style={styles.movieHeader}>{item.movie}</Text>
+                        <View style={styles.ratingContainer}>
+                            <AntDesign name="star" size={24} color={colors.ratingStar} />
+                            <Text style={styles.rating}>{item.rating}</Text>
+                        </View>
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 
@@ -56,6 +60,7 @@ export default Home
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.background,
+        margin:10,
     },
     flatListConatiner: {
         backgroundColor: colors.movieCardbackground,
@@ -72,7 +77,7 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     movieHeader: {
-        fontSize: 20,
+        fontSize: fonts.medium,
         fontWeight: '500',
 
     },
@@ -86,10 +91,9 @@ const styles = StyleSheet.create({
         paddingTop: 5
     },
     rating: {
-        fontSize: 15,
+        fontSize: fonts.small,
         marginLeft: 5,
         fontWeight: "500",
-        
     }
 
 });
