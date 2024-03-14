@@ -1,20 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Home from './screens/Home';
+import MovieDetails from './screens/MovieDetails';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const Stack = createStackNavigator();
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Movie App</Text>
-      <StatusBar style="auto" />
-    </View>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='Home' screenOptions={{ headerTitleAlign: 'center' }}>
+          <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
+          <Stack.Screen name='MovieDetails' component={MovieDetails} options={{ headerTitle: '' }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

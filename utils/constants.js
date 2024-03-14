@@ -1,0 +1,1 @@
+export const BaseURL = "https://dummyapi.online/api";
